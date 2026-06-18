@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMNTRIX — Svetlana Kasatkina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* =====================
+       Design Tokens
+    ===================== */
+    :root {
+      --color-bg:       #1a1a1a;
+      --color-text-hero:#f3f3f3;
+      --color-muted:    #999999;
+      --color-nav:      #e6e6e6;
+      --color-btn-bg:   #f3f3f3;
+      --color-btn-text: #4f4f50;
+      --font:           'Inter', sans-serif;
+      --content-w:      704px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--color-bg);
+      color: var(--color-text-hero);
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+
+    /* =====================
+       Header
+    ===================== */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 120px 0;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      background: rgba(26,26,26,0.15);
+    }
+
+    .header-left { display: flex; gap: 82px; align-items: center; }
+
+    .site-logo {
+      font-size: 20px; font-weight: 600;
+      color: var(--color-nav); text-transform: uppercase;
+      letter-spacing: 0.01em; line-height: 0.86;
+      white-space: nowrap; text-decoration: none;
+    }
+
+    .site-nav { display: flex; gap: 40px; align-items: center; list-style: none; }
+
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+
+    .nav-item a {
+      font-size: 16px; font-weight: 600; color: var(--color-nav);
+      text-transform: uppercase; line-height: 0.86;
+      text-decoration: none; white-space: nowrap;
+    }
+
+    .nav-underline {
+      height: 3px; width: 23px;
+      background: var(--color-nav);
+      border-radius: 2px; opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item.active .nav-underline,
+    .nav-item:hover .nav-underline { opacity: 1; }
+
+    .header-right { display: flex; gap: 22px; align-items: center; }
+
+    .lets-connect {
+      font-size: 16px; font-weight: 600; color: var(--color-nav);
+      text-transform: uppercase; line-height: 0.86; white-space: nowrap;
+    }
+
+    .btn-telegram {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 14px 28px; background: var(--color-btn-bg);
+      border-radius: 999px; text-decoration: none;
+      font-size: 16px; font-weight: 600; color: var(--color-btn-text);
+      line-height: 0.86; white-space: nowrap;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-telegram:hover { opacity: 0.88; transform: scale(1.03); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; height: 2px; width: 24px;
+      background: var(--color-nav); border-radius: 2px;
+    }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,26,26,0.97); z-index: 200;
+      flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 28px; font-weight: 600; color: var(--color-nav);
+      text-transform: uppercase; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .mobile-nav a:hover { opacity: 0.7; }
+    .mobile-nav .btn-telegram { font-size: 18px; padding: 16px 40px; margin-top: 8px; color: var(--color-btn-text); }
+    .mobile-nav-close {
+      position: absolute; top: 20px; right: 24px;
+      font-size: 28px; color: var(--color-nav);
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+
+    /* =====================
+       Shared text styles
+    ===================== */
+    .text-lead {
+      font-size: 26px; font-weight: 500;
+      line-height: 34px; letter-spacing: -0.03em;
+      color: var(--color-muted);
+      text-align: center;
+    }
+
+    .text-bold {
+      font-size: 26px; font-weight: 500;
+      line-height: 34px; letter-spacing: -0.03em;
+      color: var(--color-text-hero);
+      text-align: center;
+    }
+
+    /* =====================
+       Case Hero
+    ===================== */
+    .case-hero {
+      padding-top: 160px;
+      padding-bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .case-title {
+      font-size: clamp(72px, 16vw, 150px);
+      font-weight: 800;
+      color: var(--color-text-hero);
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+      line-height: 0.86;
+      text-align: center;
+    }
+
+    .case-subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-muted);
+      line-height: 24px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* =====================
+       Achievements
+    ===================== */
+    .achievements {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 0 20px 100px;
+      max-width: calc(var(--content-w) + 40px);
+      margin: 0 auto;
+    }
+
+    .achievements-label,
+    .achievements-list li {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: -0.03em;
+      color: var(--color-muted);
+      text-align: center;
+    }
+
+    .achievements-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+    }
+
+    .achievements-list li strong {
+      font-weight: 700;
+      color: #f3f3f3;
+    }
+
+    /* =====================
+       Feature Section
+    ===================== */
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 120px;
+      gap: 0;
+    }
+
+    .feature-heading {
+      font-size: clamp(28px, 6.5vw, 48px);
+      font-weight: 700;
+      color: var(--color-text-hero);
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .feature-img {
+      width: var(--content-w);
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .feature-img + .feature-img {
+      margin-top: 60px;
+    }
+
+    .feature-text {
+      width: var(--content-w);
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 80px;
+      margin-bottom: 80px;
+      text-align: center;
+    }
+
+    .feature-img-pair {
+      width: var(--content-w);
+      max-width: 100%;
+      display: flex;
+      gap: 16px;
+    }
+
+    .feature-img-pair img {
+      flex: 1;
+      min-width: 0;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* =====================
+       Scroll arrow
+    ===================== */
+    .scroll-arrow {
+      position: fixed;
+      right: 120px; bottom: 60px;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.4s ease;
+    }
+    .scroll-arrow.hidden { opacity: 0; pointer-events: none; }
+    .scroll-arrow svg { width: 28px; height: 28px; opacity: 0.6; }
+
+    /* =====================
+       Animations
+    ===================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+
+    .anim-header { animation: fadeIn 0.6s ease both; }
+    .anim-1 { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.1s both; }
+    .anim-2 { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s both; }
+    .anim-3 { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.4s both; }
+    .anim-arrow {
+      animation: fadeIn 0.8s ease 0.9s both,
+                 arrowBounce 2.4s ease-in-out 1.7s infinite;
+    }
+
+    /* =====================
+       Responsive
+    ===================== */
+    @media (max-width: 1200px) {
+      .site-header { padding: 20px 60px 0; }
+      .header-left { gap: 40px; }
+      .scroll-arrow { right: 60px; }
+    }
+    @media (max-width: 960px) {
+      .site-header { padding: 20px 32px 0; }
+      .header-left { gap: 24px; }
+      .site-nav { gap: 24px; }
+      .lets-connect { display: none; }
+      .scroll-arrow { right: 32px; }
+    }
+    @media (max-width: 768px) {
+      .site-header { padding: 18px 20px; align-items: center; }
+      .header-left { gap: 0; }
+      .site-nav, .lets-connect, .header-right .btn-telegram { display: none; }
+      .hamburger { display: flex; }
+      .case-hero { padding-top: 100px; padding-bottom: 60px; }
+      .text-lead, .text-bold { font-size: 20px; }
+      .achievements-list li { font-size: 17px; }
+      .feature-img-pair { flex-direction: column; }
+      .scroll-arrow { display: none; }
+    }
+    @media (max-width: 400px) {
+      .site-logo { font-size: 15px; }
+    }
+
+    /* Cat */
+    .cat-widget {
+      position: fixed;
+      bottom: 0;
+      right: 32px;
+      z-index: 50;
+      width: 64px;
+      pointer-events: all;
+      cursor: pointer;
+    }
+    .cat-widget svg { width: 64px; height: auto; display: block; }
+
+    .cat-eyelid {
+      transform-box: fill-box;
+      transform-origin: top center;
+      transform: scaleY(0);
+      animation: catBlink 6s infinite;
+    }
+    .cat-eyelid-r { animation-delay: 0.04s; }
+    @keyframes catBlink {
+      0%, 93%, 100% { transform: scaleY(0); }
+      96%           { transform: scaleY(1); }
+      99%           { transform: scaleY(0); }
+    }
+    .cat-widget.cat-clicked .cat-eyelid {
+      animation: catBlinkOnce 0.25s 1 forwards;
+    }
+    @keyframes catBlinkOnce {
+      0%, 100% { transform: scaleY(0); }
+      40%      { transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+    <a href="index.html#about" onclick="closeMobileNav()">About</a>
+    <a href="index.html#works" onclick="closeMobileNav()">Works</a>
+    <a href="CV.pdf" target="_blank" rel="noopener" onclick="closeMobileNav()">CV</a>
+    <a href="https://t.me/SveksG" class="btn-telegram" target="_blank" rel="noopener">Telegram</a>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header anim-header">
+    <div class="header-left">
+      <a href="index.html" class="site-logo">Svetlana Kasatkina</a>
+      <ul class="site-nav">
+        <li class="nav-item"><a href="index.html#about">About</a><div class="nav-underline"></div></li>
+        <li class="nav-item active"><a href="index.html#works">Works</a><div class="nav-underline"></div></li>
+        <li class="nav-item"><a href="CV.pdf" target="_blank" rel="noopener">CV</a><div class="nav-underline"></div></li>
+      </ul>
+    </div>
+    <div class="header-right">
+      <span class="lets-connect">Let's connect</span>
+      <a href="https://t.me/SveksG" class="btn-telegram" target="_blank" rel="noopener">Telegram</a>
+      <button class="hamburger" onclick="openMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Case Hero -->
+    <section class="case-hero">
+      <h1 class="case-title anim-1">LMNTRIX</h1>
+      <p class="case-subtitle anim-2">B2B SaaS · Dark UI · Data-heavy dashboards · Real-time threat monitoring</p>
+    </section>
+
+    <!-- Achievements -->
+    <section class="achievements anim-3">
+      <p class="achievements-label">Selected achievements</p>
+      <ul class="achievements-list">
+        <li><strong>Designed and launched new product areas and features</strong> for a cybersecurity platform, bringing ideas from early concepts to production.</li>
+        <li>Built and maintained a design system that <strong>helped the team deliver faster and keep the experience consistent</strong> as the product expanded.</li>
+        <li><strong>Simplified complex security workflows</strong> and translated technical processes into interfaces that were easier to navigate and act on.</li>
+        <li>Worked closely with engineers throughout delivery to <strong>keep implementation aligned with design decisions.</strong></li>
+        <li><strong>Improved internal design processes</strong> to reduce repetitive work and support smoother collaboration across teams.</li>
+      </ul>
+    </section>
+
+    <!-- Feature: Breach Intelligence Search -->
+    <section class="feature">
+      <h2 class="feature-heading">Breach Intelligence Search</h2>
+
+      <img class="feature-img" src="lmntrix_1.png" alt="LMNTRIX — Breach Intelligence Search, screen 1" loading="lazy" onerror="this.style.display='none'">
+      <img class="feature-img" src="lmntrix_2.png" alt="LMNTRIX — Breach Intelligence Search, screen 2" loading="lazy" onerror="this.style.display='none'">
+
+      <div class="feature-text">
+        <p class="text-lead">This was a core investigation feature for exploring data breaches and exposed employee sessions. The platform aggregated large-scale breach data, including compromised sessions, cookies, and related metadata. Analysts needed to investigate exposure events, but the data was fragmented and required switching between filters and tools to narrow down cases.</p>
+        <p class="text-bold">I designed a unified search experience with multiple parameters — domain, country, keywords, and combined filters. I worked on filter interactions, result structure, and how to keep complex data readable without overwhelming users. The flow became more flexible: analysts could start from one entry point and refine searches instead of rebuilding them across tools.</p>
+      </div>
+
+      <div class="feature-img-pair">
+        <img src="lmntrix_3.png" alt="LMNTRIX — Search UI detail" loading="lazy" onerror="this.style.display='none'">
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Cat Widget -->
+  <div class="cat-widget" id="catWidget">
+    <svg viewBox="0 0 86 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <path d="M19.1396 6.38211e-08C10.2973 6.38211e-08 1.13965 24 -5.53131e-05 60H85.8858C84.9871 32.5413 76.5241 0.00127255 67.9114 6.38215e-08C59.2987 -0.00127243 59.6731 19.0263 59.6731 19.0263C59.6731 19.0263 43.1966 14.5495 26.3457 18.2787C27.5939 11.6879 23.3422 6.38211e-08 19.1396 6.38211e-08Z" fill="#3F3F3F"/>
+      <!-- eye whites -->
+      <path d="M70.5326 42.1563C70.5326 48.1314 65.6706 52.9752 59.6731 52.9752C53.6756 52.9752 48.8136 48.1314 48.8136 42.1563C48.8136 36.1812 53.6756 31.3374 59.6731 31.3374C65.6706 31.3374 70.5326 36.1812 70.5326 42.1563Z" fill="#E4E4E4"/>
+      <path d="M32.3371 42.1563C32.3371 48.1314 27.4752 52.9752 21.4776 52.9752C15.4801 52.9752 10.6181 48.1314 10.6181 42.1563C10.6181 36.1812 15.4801 31.3374 21.4776 31.3374C27.4752 31.3374 32.3371 36.1812 32.3371 42.1563Z" fill="#E4E4E4"/>
+      <!-- pupils (circles for animation) -->
+      <circle id="pupil-left"  cx="21.4776" cy="42.1563" r="4.66" fill="#1A1A1A"/>
+      <circle id="pupil-right" cx="59.6731" cy="42.1563" r="4.66" fill="#1A1A1A"/>
+      <!-- nose -->
+      <ellipse cx="40.58" cy="53.5" rx="2.8" ry="2" fill="#C4958A"/>
+      <!-- eyelids (for blink) -->
+      <rect class="cat-eyelid"                  x="10.62" y="31.34" width="21.72" height="21.72" fill="#3F3F3F" rx="10.86"/>
+      <rect class="cat-eyelid cat-eyelid-r" x="48.81" y="31.34" width="21.72" height="21.72" fill="#3F3F3F" rx="10.86"/>
+    </svg>
+  </div>
+
+  <script>
+    function openMobileNav() {
+      document.getElementById('mobileNav').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileNav(); });
+
+    // Cat eye tracking
+    (function () {
+      const cat = document.getElementById('catWidget');
+      const pL  = document.getElementById('pupil-left');
+      const pR  = document.getElementById('pupil-right');
+      const leftEye  = { x: 21.4776, y: 42.1563 };
+      const rightEye = { x: 59.6731, y: 42.1563 };
+      const maxMove  = 3.2;
+
+      function update(mx, my) {
+        const r = cat.getBoundingClientRect();
+        const sx = 86 / r.width;
+        const sy = 60 / r.height;
+        const cx = (mx - r.left) * sx;
+        const cy = (my - r.top)  * sy;
+        [{ eye: leftEye, el: pL }, { eye: rightEye, el: pR }].forEach(({ eye, el }) => {
+          const dx = cx - eye.x, dy = cy - eye.y;
+          const d  = Math.sqrt(dx * dx + dy * dy) || 1;
+          const m  = Math.min(d, maxMove);
+          el.setAttribute('cx', eye.x + (dx / d) * m);
+          el.setAttribute('cy', eye.y + (dy / d) * m);
+        });
+      }
+      document.addEventListener('mousemove', e => update(e.clientX, e.clientY));
+
+      // Click to blink once
+      cat.addEventListener('click', () => {
+        cat.classList.remove('cat-clicked');
+        void cat.offsetWidth;
+        cat.classList.add('cat-clicked');
+        setTimeout(() => cat.classList.remove('cat-clicked'), 300);
+      });
+    })();
+
+  </script>
+
+</body>
+</html>
